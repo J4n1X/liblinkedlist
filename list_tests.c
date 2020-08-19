@@ -10,7 +10,7 @@
 #define VERBOSE 1
 
 int main(int argc, char *argv[]){
-    if(argc != 3){
+    if(argc != 2){
         puts("Argument error!");
         return 1;
     }
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
         puts("Argument error! Conversion failed or number too large for Arg 1. Exiting...");
         exit(2);
     } 
-    uint32_t node_size = strtoul(argv[2],&errstr,10);
+    uint32_t node_size = 4; 
     if(errstr != NULL){
         list *main_list = list_create(cycles,node_size);
         list_item *cur_item = main_list->first;

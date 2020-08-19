@@ -8,7 +8,15 @@ CFILES:=$(wildcard $(ROOTDIR)/*.c)
 OFILES:=$(pathsubst $(ROOTDIR)/%.c,$(OBJDIR)/%.o,$(CFILES))
 HFILES=liblist.h
 
+ifeq ($(PREFIX),)
+    PREFIX := /usr
+endif
+
 all: static shared
+
+install: shared
+	install -d $(DESTDIR)$(PREFIX)/lib/
+	install -m 644 $(LIBDIR)/liblist.so $(DESTDIR)$(PREFIX)/lib/
 
 shared: $(OBJDIR)/liblist.o prepare
 	$(CC) -shared $(OBJDIR)/liblist.o -o lib/liblist.so
