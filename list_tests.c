@@ -29,8 +29,12 @@ int main(int argc, char *argv[]){
             memcpy(cur_item->val,&i,main_list->node_size);
             cur_item = cur_item->next;
         }
-        // this will allow for faster access later, but takes long to create
+        // test adding and removing items
         list_remove_item(main_list,0);
+        int insert_val = 420;
+        list_insert_item(main_list,0, &insert_val);
+        list_insert_item(main_list,5,&insert_val);
+        // this will allow for faster access later, but takes long to create
         list_build_index(main_list);
 
         #if VERBOSE == 1 

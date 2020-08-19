@@ -22,6 +22,7 @@ extern list_item *list_get_item(list *item_list, size_t pos);
 extern list_item *list_create_item(void *item_value);
 extern list_item *list_prealloc(size_t item_count, size_t node_size);
 extern void list_append_item(list *item_list, void *append_value);
+extern void list_insert_item(list *item_list, size_t pos, void *insert_value);
 extern void list_remove_item(list *item_list, size_t pos);
 extern void list_build_index(list *item_list);
 extern list *list_create(size_t list_size, size_t node_size);

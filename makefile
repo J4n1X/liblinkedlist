@@ -25,7 +25,7 @@ static: $(OBJDIR)/liblist.o prepare
 	ar rcs $(LIBDIR)/liblist.a 
 
 $(OBJDIR)/%.o: $(ROOTDIR)/%.c prepare
-	$(CC) $(CFLAGS) -c $< -o $@ $(CFLAGS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 prepare:
 	@if [ ! -d $(OBJDIR) ]; then mkdir $(OBJDIR); fi
