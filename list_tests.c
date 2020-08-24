@@ -24,16 +24,14 @@ int main(int argc, char *argv[]){
     if(errstr != NULL){
         list *main_list = list_create(cycles,node_size);
         list_item *cur_item = main_list->first;
-        for(int i = 0; i < main_list->size; i++){
-            cur_item->val = malloc(main_list->node_size);
-            memcpy(cur_item->val,&i,main_list->node_size);
-            cur_item = cur_item->next;
-        }
+        for(int i = 0; i < cycles; i++)
+            list_set_item(list_get_item(main_list,i),&i,sizeof(i));
         // test adding and removing items
         list_remove_item(main_list,0);
         int insert_val = 420;
-        list_insert_item(main_list,0, &insert_val);
-        list_insert_item(main_list,5,&insert_val);
+        list_insert_item(main_list,0, &insert_val, sizeof(insert_val));
+        list_insert_item(main_list,5,&insert_val, sizeof(insert_val));
+        list_set_item(list_get_item(main_list,20),&insert_val, node_size);
         // this will allow for faster access later, but takes long to create
         list_build_index(main_list);
 

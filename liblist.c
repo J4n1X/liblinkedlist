@@ -35,22 +35,23 @@ list_item *list_get_item(list *item_list, size_t pos){
 //
 #pragma region setters
 // creates list item with next = NULL and val = 0
-list_item *list_create_item(void *item_value){
+list_item *list_create_item(void *item_value, size_t value_size){
     list_item *new_item;
     new_item = malloc(sizeof(list));
     new_item->val = item_value;
+    new_item->size = value_size;
     new_item->next = NULL;
     return new_item;
 }
 
 // this is faster than appending one by one, as we just move through very quickly
 list_item *list_prealloc(size_t item_count, size_t node_size){
-    list_item *initial_item = list_create_item(NULL);
+    list_item *initial_item = node_size != 0 ? list_create_item(malloc(node_size),node_size) : list_create_item(NULL, 0);
     //list_item **ret_list = &initial_item;
     list_item *cur_item = initial_item;
 
     for(size_t i = item_count - 1; i > 0; i--){
-        cur_item->next = list_create_item(0);
+        cur_item->next = node_size != 0 ? list_create_item(malloc(node_size),node_size) : list_create_item(NULL, 0);
         cur_item = cur_item->next;
 #if VERBOSE == 1
         if(!(i % 50))
@@ -61,19 +62,24 @@ list_item *list_prealloc(size_t item_count, size_t node_size){
     //return *ret_list;
 }
 
-void list_append_item(list *item_list, void *append_value){
-    item_list->last->next = list_create_item(malloc(item_list->node_size));
+void list_set_item(list_item *node, void *node_value, size_t node_size){
+    memcpy(node->val, node_value, node_size);
+    node->size = node_size;
+}
+
+void list_append_item(list *item_list, void *append_value, size_t node_size){
+    item_list->last->next = list_create_item(malloc(node_size), node_size);
     item_list->last = item_list->last->next;
     // copy so the user can pass a pointer of a variable or allocated space
-    memcpy(item_list->last->val,append_value,item_list->node_size);
+    memcpy(item_list->last->val,append_value, node_size);
     item_list->size++;
     item_list->index_stale = 1;
 }
 
-void list_insert_item(list *item_list, size_t pos, void *insert_value){
+void list_insert_item(list *item_list, size_t pos, void *insert_value, size_t node_size){
     list_item *cur_item;
-    list_item *new_item = list_create_item(malloc(item_list->node_size));
-    memcpy(new_item->val,insert_value,item_list->node_size);
+    list_item *new_item = list_create_item(malloc(node_size), node_size);
+    memcpy(new_item->val,insert_value,node_size);
 
     if(pos > 0){
         // NULL is returned if the object is out of range
@@ -136,7 +142,6 @@ list *list_create(size_t list_size, size_t node_size){
     ret_list->first = list_prealloc(list_size,node_size);
     ret_list->last = list_get_final(ret_list->first);
     ret_list->size = list_size;
-    ret_list->node_size =  node_size;
     // sets index and index_stale
     list_build_index(ret_list);
     return ret_list;
