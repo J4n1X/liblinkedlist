@@ -37,7 +37,7 @@ list_item *list_get_item(list *item_list, size_t pos){
 // creates list item with next = NULL and val = 0
 list_item *list_create_item(void *item_value, size_t value_size){
     list_item *new_item;
-    new_item = malloc(sizeof(list));
+    new_item = malloc(sizeof(list_item));
     new_item->val = item_value;
     new_item->size = value_size;
     new_item->next = NULL;
